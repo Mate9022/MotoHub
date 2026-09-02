@@ -1,0 +1,158 @@
+<aside class="card totals">
+
+  <h2>
+    Összesítés
+  </h2>
+
+
+  <div class="totals-row">
+
+    <span>
+      Munkadíj
+    </span>
+
+    <strong>
+
+      {{
+        order.laborTotal
+          | number:'1.0-0'
+      }} Ft
+
+    </strong>
+
+  </div>
+
+
+  <div class="totals-row">
+
+    <span>
+      Alkatrészek
+    </span>
+
+    <strong>
+
+      {{
+        order.partsTotal
+          | number:'1.0-0'
+      }} Ft
+
+    </strong>
+
+  </div>
+
+
+  <div class="totals-row grand-total">
+
+    <span>
+      Összesen
+    </span>
+
+    <strong>
+
+      {{
+        order.grandTotal
+          | number:'1.0-0'
+      }} Ft
+
+    </strong>
+
+  </div>
+
+
+  <div class="totals-meta">
+
+    <div class="muted">
+
+      Beérkezés:
+
+      {{
+        order.receivedAt
+          | date:'yyyy.MM.dd. HH:mm'
+      }}
+
+    </div>
+
+
+    <div
+      class="muted"
+      *ngIf="order.readyAt">
+
+      Javítás elkészült:
+
+      {{
+        order.readyAt
+          | date:'yyyy.MM.dd. HH:mm'
+      }}
+
+    </div>
+
+
+    <div
+      class="muted"
+      *ngIf="order.handedOverAt">
+
+      Átadás:
+
+      {{
+        order.handedOverAt
+          | date:'yyyy.MM.dd. HH:mm'
+      }}
+
+    </div>
+
+
+    <div class="muted">
+
+      Beérkezési km:
+
+      {{
+        order.odometerKm
+          | number:'1.0-0'
+      }} km
+
+    </div>
+
+
+    <div
+      class="muted"
+      *ngIf="
+        order.handedOverOdometerKm != null
+      ">
+
+      Átadáskori km:
+
+      {{
+        order.handedOverOdometerKm
+          | number:'1.0-0'
+      }} km
+
+    </div>
+
+
+    <div
+      class="muted"
+      *ngIf="
+        defaultHourlyRate > 0
+      ">
+
+      Alapóradíj:
+
+      {{
+        defaultHourlyRate
+          | number:'1.0-0'
+      }} Ft / óra
+
+    </div>
+
+
+    <div class="muted">
+
+      Fotók:
+
+      {{ photoCount }} db
+
+    </div>
+
+  </div>
+
+</aside>

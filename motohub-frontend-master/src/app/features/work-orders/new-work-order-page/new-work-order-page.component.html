@@ -1,0 +1,241 @@
+<section class="page-heading">
+
+  <div>
+
+    <span class="eyebrow">
+      Új szervizelés
+    </span>
+
+    <h1>
+      Új munkalap
+    </h1>
+
+    <p>
+      Meglévő ügyfél és motor kiválasztása.
+    </p>
+
+  </div>
+
+</section>
+
+
+<form
+  #formRef="ngForm"
+  class="stack"
+  (ngSubmit)="submit(formRef)">
+
+
+  <section class="card form-card">
+
+    <h2>
+      1. Ügyfél
+    </h2>
+
+
+    <label>
+
+      Ügyfél
+
+      <select
+        required
+        name="customerId"
+        [ngModel]="customerId()"
+        (ngModelChange)="customerChanged($event)">
+
+        <option value="">
+          Válassz ügyfelet
+        </option>
+
+
+        <option
+          *ngFor="let customer of customers()"
+          [value]="customer.id">
+
+          {{ customer.name }}
+
+          <ng-container
+            *ngIf="customer.phone">
+
+            · {{ customer.phone }}
+
+          </ng-container>
+
+        </option>
+
+      </select>
+
+    </label>
+
+  </section>
+
+
+  <section class="card form-card">
+
+    <h2>
+      2. Motor
+    </h2>
+
+
+    <label>
+
+      Motorkerékpár
+
+      <select
+        required
+        name="motorcycleId"
+        [ngModel]="motorcycleId()"
+        (ngModelChange)="
+          motorcycleId.set($event)
+        "
+        [disabled]="
+          !customerId() ||
+          motorcyclesLoading()
+        ">
+
+        <option value="">
+
+          {{
+            motorcyclesLoading()
+              ? 'Motorok betöltése…'
+              : 'Válassz motort'
+          }}
+
+        </option>
+
+
+        <option
+          *ngFor="let motorcycle of motorcycles()"
+          [value]="motorcycle.id">
+
+          {{ motorcycle.brand }}
+          {{ motorcycle.model }}
+
+          ·
+
+          {{
+            motorcycle.licensePlate
+              || 'nincs rendszám'
+          }}
+
+        </option>
+
+      </select>
+
+    </label>
+
+
+    <div
+      class="muted top-space"
+      *ngIf="
+        customerId() &&
+        !motorcyclesLoading() &&
+        motorcycles().length === 0
+      ">
+
+      Az ügyfélhez nincs motor felvéve.
+
+    </div>
+
+
+    <div
+      class="selected-motor-card"
+      *ngIf="selectedMotorcycle() as selected">
+
+      <strong>
+
+        {{ selected.brand }}
+        {{ selected.model }}
+
+      </strong>
+
+
+      <div class="muted">
+
+        {{
+          selected.licensePlate
+            || 'nincs rendszám'
+        }}
+
+        <ng-container
+          *ngIf="selected.modelYear">
+
+          · {{ selected.modelYear }}
+
+        </ng-container>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="card form-card">
+
+    <h2>
+      3. Munkalap
+    </h2>
+
+
+    <div class="form-grid">
+
+      <label>
+
+        Kilométeróra
+
+        <input
+          required
+          name="odometerKm"
+          [(ngModel)]="form.odometerKm"
+          type="number"
+          min="0"
+          inputmode="numeric">
+
+      </label>
+
+
+      <label class="wide">
+
+        Ügyfél panasza / kérése
+
+        <textarea
+          name="complaint"
+          [(ngModel)]="form.complaint"
+          rows="6"
+          placeholder="Pl. kuplungbowden szakadás, általános átvizsgálás...">
+        </textarea>
+
+      </label>
+
+    </div>
+
+  </section>
+
+
+  <section
+    class="card error"
+    *ngIf="error()">
+
+    {{ error() }}
+
+  </section>
+
+
+  <button
+    class="button primary large"
+    type="submit"
+    [disabled]="
+      formRef.invalid ||
+      saving() ||
+      !motorcycleId()
+    ">
+
+    {{
+      saving()
+        ? 'Mentés…'
+        : 'Munkalap létrehozása'
+    }}
+
+  </button>
+
+</form>

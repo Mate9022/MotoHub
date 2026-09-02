@@ -1,0 +1,16 @@
+<section class="card">
+    <div class="customer-search">
+        <input
+            type="search"
+            [ngModel]="search"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Keresés név, telefon vagy e-mail alapján">
+
+        <button
+            class="button"
+            type="button"
+            (click)="searchSubmit.emit()">
+            Keresés
+        </button>
+    </div>
+</section>

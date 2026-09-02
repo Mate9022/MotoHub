@@ -1,0 +1,13 @@
+<section class="card">
+    <h2>Rendszerinformáció</h2>
+
+    <div class="muted">
+        Létrehozva:
+        {{ customer.createdAt | date:'yyyy.MM.dd. HH:mm' }}
+    </div>
+
+    <div class="muted">
+        Utoljára módosítva:
+        {{ customer.updatedAt | date:'yyyy.MM.dd. HH:mm' }}
+    </div>
+</section>

@@ -1,0 +1,84 @@
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Motorkerékpár</span>
+        <h1>Új motor</h1>
+
+        <p *ngIf="customer() as customer">
+            Tulajdonos:
+            <strong>{{ customer.name }}</strong>
+        </p>
+    </div>
+</section>
+
+<form
+    #motorcycleForm="ngForm"
+    class="stack"
+    (ngSubmit)="submit(motorcycleForm)">
+
+    <section class="card form-card">
+        <h2>Motor adatai</h2>
+
+        <div class="form-grid">
+            <label>
+                Márka
+                <input
+                    required
+                    maxlength="100"
+                    name="brand"
+                    [(ngModel)]="form.brand"
+                    placeholder="Yamaha">
+            </label>
+
+            <label>
+                Típus
+                <input
+                    required
+                    maxlength="120"
+                    name="model"
+                    [(ngModel)]="form.model"
+                    placeholder="FZ6">
+            </label>
+
+            <label>
+                Évjárat
+                <input
+                    name="modelYear"
+                    [(ngModel)]="form.modelYear"
+                    type="number"
+                    min="1900"
+                    max="2100"
+                    inputmode="numeric">
+            </label>
+
+            <label>
+                Rendszám
+                <input
+                    maxlength="30"
+                    name="licensePlate"
+                    [(ngModel)]="form.licensePlate"
+                    placeholder="UPV330">
+            </label>
+
+            <label class="wide">
+                Alvázszám (VIN)
+                <input
+                    maxlength="80"
+                    name="vin"
+                    [(ngModel)]="form.vin">
+            </label>
+        </div>
+    </section>
+
+    <section
+        class="card error"
+        *ngIf="error()">
+        {{ error() }}
+    </section>
+
+    <button
+        class="button primary large"
+        type="submit"
+        [disabled]="motorcycleForm.invalid || saving()">
+        {{ saving() ? 'Mentés…' : 'Motor létrehozása' }}
+    </button>
+</form>

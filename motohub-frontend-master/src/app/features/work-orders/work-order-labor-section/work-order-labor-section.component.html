@@ -1,0 +1,272 @@
+<section class="card">
+
+  <div class="row between gap wrap">
+
+    <div>
+
+      <h2>
+        Elvégzett munkák
+      </h2>
+
+      <p class="muted">
+        Munkadíj tételek.
+      </p>
+
+
+      <p
+        class="muted"
+        *ngIf="
+          defaultHourlyRate > 0
+        ">
+
+        Műhely alapóradíja:
+
+        <strong>
+
+          {{
+            defaultHourlyRate
+              | number:'1.0-0'
+          }} Ft / óra
+
+        </strong>
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="empty"
+    *ngIf="
+      items.length === 0
+    ">
+
+    Még nincs rögzített munkadíj.
+
+  </div>
+
+
+  <div
+    class="work-item"
+    *ngFor="
+      let item of items
+    ">
+
+    <ng-container
+      *ngIf="
+        item.id &&
+        editingLaborId === item.id;
+        else laborViewTemplate
+      ">
+
+      <div class="inline-edit-form">
+
+        <label>
+
+          Munka
+
+          <input
+            [(ngModel)]="
+              laborEdit.description
+            "
+            maxlength="240">
+
+        </label>
+
+
+        <label>
+
+          Óra
+
+          <input
+            [(ngModel)]="
+              laborEdit.hours
+            "
+            type="number"
+            min="0.01"
+            step="0.1">
+
+        </label>
+
+
+        <label>
+
+          Óradíj
+
+          <input
+            [(ngModel)]="
+              laborEdit.hourlyRate
+            "
+            type="number"
+            min="0">
+
+        </label>
+
+
+        <div class="row gap wrap">
+
+          <button
+            class="button"
+            type="button"
+            [disabled]="actionBusy"
+            (click)="
+              saveEditRequested.emit(item)
+            ">
+
+            Mentés
+
+          </button>
+
+
+          <button
+            class="button"
+            type="button"
+            [disabled]="actionBusy"
+            (click)="
+              cancelEditRequested.emit()
+            ">
+
+            Mégse
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+
+    <ng-template #laborViewTemplate>
+
+      <div class="work-item-content">
+
+        <div class="work-item-info">
+
+          <strong>
+            {{ item.description }}
+          </strong>
+
+
+          <div class="muted">
+
+            {{ item.hours }} óra
+
+            ×
+
+            {{
+              item.hourlyRate
+                | number:'1.0-0'
+            }} Ft
+
+          </div>
+
+        </div>
+
+
+        <div class="work-item-actions">
+
+          <strong class="work-item-total">
+
+            {{
+              item.total
+                | number:'1.0-0'
+            }} Ft
+
+          </strong>
+
+
+          <ng-container
+            *ngIf="
+              !completed &&
+              item.id
+            ">
+
+            <button
+              class="button small"
+              type="button"
+              [disabled]="actionBusy"
+              (click)="
+                startEditRequested.emit(item)
+              ">
+
+              Szerkesztés
+
+            </button>
+
+
+            <button
+              class="button small danger"
+              type="button"
+              [disabled]="actionBusy"
+              (click)="
+                deleteRequested.emit(item)
+              ">
+
+              Törlés
+
+            </button>
+
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+
+  <form
+    *ngIf="!completed"
+    #laborForm="ngForm"
+    class="inline-form labor-add-form"
+    (ngSubmit)="
+      addRequested.emit(laborForm)
+    ">
+
+    <input
+      required
+      maxlength="240"
+      name="laborDescription"
+      [(ngModel)]="labor.description"
+      placeholder="Munka megnevezése">
+
+
+    <input
+      required
+      name="laborHours"
+      [(ngModel)]="labor.hours"
+      type="number"
+      min="0.01"
+      step="0.1"
+      placeholder="Óra">
+
+
+    <input
+      required
+      name="laborHourlyRate"
+      [(ngModel)]="labor.hourlyRate"
+      type="number"
+      min="0"
+      placeholder="Óradíj">
+
+
+    <button
+      class="button"
+      type="submit"
+      [disabled]="
+        laborForm.invalid ||
+        actionBusy
+      ">
+
+      + Munka
+
+    </button>
+
+  </form>
+
+</section>

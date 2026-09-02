@@ -1,0 +1,192 @@
+<section class="card">
+
+  <div class="row between gap wrap">
+
+    <div>
+
+      <h2>
+        Fotók
+      </h2>
+
+      <p class="muted">
+
+        Állapotfelmérés, hibák és az elkészült
+        javítás dokumentálása.
+
+      </p>
+
+    </div>
+
+
+    <div
+      *ngIf="!completed"
+      class="row gap wrap">
+
+      <label
+        class="button photo-upload-button"
+        [class.disabled]="uploading">
+
+        {{
+          uploading
+            ? 'Feltöltés…'
+            : '📷 Kamera'
+        }}
+
+
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          [disabled]="uploading"
+          (change)="
+            uploadRequested.emit($event)
+          ">
+
+      </label>
+
+
+      <label
+        class="button photo-upload-button"
+        [class.disabled]="uploading">
+
+        {{
+          uploading
+            ? 'Feltöltés…'
+            : '🖼️ Galéria'
+        }}
+
+
+        <input
+          type="file"
+          accept="
+            image/jpeg,
+            image/png,
+            image/webp
+          "
+          [disabled]="uploading"
+          (change)="
+            uploadRequested.emit($event)
+          ">
+
+      </label>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="muted top-space"
+    *ngIf="loading">
+
+    Fotók betöltése…
+
+  </div>
+
+
+  <div
+    class="empty"
+    *ngIf="
+      !loading &&
+      photos.length === 0
+    ">
+
+    Ehhez a munkalaphoz még nincs fotó.
+
+  </div>
+
+
+  <div
+    class="photo-grid"
+    *ngIf="
+      !loading &&
+      photos.length > 0
+    ">
+
+    <div
+      class="photo-card"
+      *ngFor="
+        let photo of photos
+      ">
+
+      <a
+        class="photo-preview"
+        [href]="
+          api.workOrderPhotoUrl(
+            workOrderId,
+            photo.id
+          )
+        "
+        target="_blank">
+
+        <img
+          loading="lazy"
+          [src]="
+            api.workOrderPhotoUrl(
+              workOrderId,
+              photo.id
+            )
+          "
+          [alt]="photo.originalFileName">
+
+      </a>
+
+
+      <div class="photo-info">
+
+        <div
+          class="photo-name"
+          [title]="photo.originalFileName">
+
+          {{ photo.originalFileName }}
+
+        </div>
+
+
+        <div class="muted photo-meta">
+
+          {{
+            photo.createdAt
+              | date:'yyyy.MM.dd. HH:mm'
+          }}
+
+          ·
+
+          {{
+            formatFileSize(
+              photo.fileSize
+            )
+          }}
+
+        </div>
+
+
+        <button
+          *ngIf="!completed"
+          class="button small danger"
+          type="button"
+          [disabled]="uploading"
+          (click)="
+            deleteRequested.emit(photo)
+          ">
+
+          Törlés
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="error top-space"
+    *ngIf="error">
+
+    {{ error }}
+
+  </div>
+
+</section>

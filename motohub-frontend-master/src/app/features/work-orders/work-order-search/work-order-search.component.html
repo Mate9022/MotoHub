@@ -1,0 +1,22 @@
+<section class="card">
+
+  <div class="customer-search">
+
+    <input
+      type="search"
+      [(ngModel)]="search"
+      placeholder="Munkalapszám, ügyfél, rendszám, motor vagy VIN"
+      (keyup.enter)="submit()">
+
+    <button
+      type="button"
+      class="button"
+      (click)="submit()">
+
+      Keresés
+
+    </button>
+
+  </div>
+
+</section>

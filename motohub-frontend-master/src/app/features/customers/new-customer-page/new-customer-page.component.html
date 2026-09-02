@@ -1,0 +1,57 @@
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Ügyfél</span>
+        <h1>Új ügyfél</h1>
+        <p>Új ügyfél felvétele a műhely nyilvántartásába.</p>
+    </div>
+</section>
+
+<form
+    #customerForm="ngForm"
+    class="stack"
+    (ngSubmit)="submit(customerForm)">
+
+    <section class="card form-card">
+        <div class="form-grid">
+            <label>
+                Név
+                <input
+                    required
+                    maxlength="160"
+                    name="name"
+                    [(ngModel)]="form.name">
+            </label>
+
+            <label>
+                Telefonszám
+                <input
+                    maxlength="60"
+                    name="phone"
+                    [(ngModel)]="form.phone"
+                    inputmode="tel">
+            </label>
+
+            <label>
+                E-mail
+                <input
+                    maxlength="160"
+                    name="email"
+                    [(ngModel)]="form.email"
+                    type="email">
+            </label>
+        </div>
+    </section>
+
+    <section
+        class="card error"
+        *ngIf="error()">
+        {{ error() }}
+    </section>
+
+    <button
+        class="button primary large"
+        type="submit"
+        [disabled]="customerForm.invalid || saving()">
+        {{ saving() ? 'Mentés…' : 'Ügyfél létrehozása' }}
+    </button>
+</form>

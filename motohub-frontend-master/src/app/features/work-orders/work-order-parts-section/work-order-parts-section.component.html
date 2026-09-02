@@ -1,0 +1,288 @@
+<section class="card">
+
+  <div class="row between gap wrap">
+
+    <div>
+
+      <h2>
+        Alkatrészek / anyagok
+      </h2>
+
+      <p class="muted">
+        Felhasznált alkatrészek és anyagok.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="empty"
+    *ngIf="
+      items.length === 0
+    ">
+
+    Még nincs rögzített alkatrész.
+
+  </div>
+
+
+  <div
+    class="work-item"
+    *ngFor="
+      let item of items
+    ">
+
+    <ng-container
+      *ngIf="
+        item.id &&
+        editingPartId === item.id;
+        else partViewTemplate
+      ">
+
+      <div class="inline-edit-form part-edit-form">
+
+        <label>
+
+          Alkatrész
+
+          <input
+            [(ngModel)]="
+              partEdit.description
+            "
+            maxlength="240">
+
+        </label>
+
+
+        <label>
+
+          Cikkszám
+
+          <input
+            [(ngModel)]="
+              partEdit.sku
+            "
+            maxlength="120">
+
+        </label>
+
+
+        <label>
+
+          Mennyiség
+
+          <input
+            [(ngModel)]="
+              partEdit.quantity
+            "
+            type="number"
+            min="0.01"
+            step="0.1">
+
+        </label>
+
+
+        <label>
+
+          Egységár
+
+          <input
+            [(ngModel)]="
+              partEdit.unitPrice
+            "
+            type="number"
+            min="0">
+
+        </label>
+
+
+        <div class="row gap wrap">
+
+          <button
+            class="button"
+            type="button"
+            [disabled]="actionBusy"
+            (click)="
+              saveEditRequested.emit(item)
+            ">
+
+            Mentés
+
+          </button>
+
+
+          <button
+            class="button"
+            type="button"
+            [disabled]="actionBusy"
+            (click)="
+              cancelEditRequested.emit()
+            ">
+
+            Mégse
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </ng-container>
+
+
+    <ng-template #partViewTemplate>
+
+      <div class="work-item-content">
+
+        <div class="work-item-info">
+
+          <strong>
+            {{ item.description }}
+          </strong>
+
+
+          <div class="muted">
+
+            {{ item.quantity }}
+
+            ×
+
+            {{
+              item.unitPrice
+                | number:'1.0-0'
+            }} Ft
+
+
+            <ng-container
+              *ngIf="item.sku">
+
+              · {{ item.sku }}
+
+            </ng-container>
+
+
+            <ng-container
+              *ngIf="!item.sku">
+
+              · nincs cikkszám
+
+            </ng-container>
+
+          </div>
+
+        </div>
+
+
+        <div class="work-item-actions">
+
+          <strong class="work-item-total">
+
+            {{
+              item.total
+                | number:'1.0-0'
+            }} Ft
+
+          </strong>
+
+
+          <ng-container
+            *ngIf="
+              !completed &&
+              item.id
+            ">
+
+            <button
+              class="button small"
+              type="button"
+              [disabled]="actionBusy"
+              (click)="
+                startEditRequested.emit(item)
+              ">
+
+              Szerkesztés
+
+            </button>
+
+
+            <button
+              class="button small danger"
+              type="button"
+              [disabled]="actionBusy"
+              (click)="
+                deleteRequested.emit(item)
+              ">
+
+              Törlés
+
+            </button>
+
+          </ng-container>
+
+        </div>
+
+      </div>
+
+    </ng-template>
+
+  </div>
+
+
+  <form
+    *ngIf="!completed"
+    #partForm="ngForm"
+    class="inline-form part-add-form"
+    (ngSubmit)="
+      addRequested.emit(partForm)
+    ">
+
+    <input
+      required
+      maxlength="240"
+      name="partDescription"
+      [(ngModel)]="part.description"
+      placeholder="Alkatrész / anyag">
+
+
+    <input
+      maxlength="120"
+      name="partSku"
+      [(ngModel)]="part.sku"
+      placeholder="Cikkszám">
+
+
+    <input
+      required
+      name="partQuantity"
+      [(ngModel)]="part.quantity"
+      type="number"
+      min="0.01"
+      step="0.1"
+      placeholder="Menny.">
+
+
+    <input
+      required
+      name="partUnitPrice"
+      [(ngModel)]="part.unitPrice"
+      type="number"
+      min="0"
+      placeholder="Egységár">
+
+
+    <button
+      class="button"
+      type="submit"
+      [disabled]="
+        partForm.invalid ||
+        actionBusy
+      ">
+
+      + Tétel
+
+    </button>
+
+  </form>
+
+</section>

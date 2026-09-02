@@ -1,0 +1,95 @@
+<ng-container *ngIf="customer() as customer; else loadingTemplate">
+    <section class="page-heading">
+        <div>
+            <span class="eyebrow">Ügyfél</span>
+            <h1>{{ customer.name }}</h1>
+            <p>Ügyféladatok, motorok és kapcsolattartási információk.</p>
+        </div>
+    </section>
+
+    <form
+        #customerForm="ngForm"
+        class="stack"
+        (ngSubmit)="save(customerForm)">
+
+        <section class="card form-card">
+            <div class="row between gap wrap">
+                <div>
+                    <h2>Ügyfél adatai</h2>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <label>
+                    Név
+                    <input
+                        required
+                        maxlength="160"
+                        name="name"
+                        [(ngModel)]="form.name">
+                </label>
+
+                <label>
+                    Telefonszám
+                    <input
+                        maxlength="60"
+                        name="phone"
+                        [(ngModel)]="form.phone"
+                        inputmode="tel">
+                </label>
+
+                <label>
+                    E-mail
+                    <input
+                        maxlength="160"
+                        name="email"
+                        [(ngModel)]="form.email"
+                        type="email">
+                </label>
+            </div>
+        </section>
+
+        <app-customer-motorcycles-section
+            [customerId]="customer.id"
+            [motorcycles]="motorcycles()"
+            [loading]="motorcyclesLoading()">
+        </app-customer-motorcycles-section>
+
+        <app-customer-system-info
+            [customer]="customer">
+        </app-customer-system-info>
+
+        <section
+            class="card error"
+            *ngIf="error()">
+            {{ error() }}
+        </section>
+
+        <section
+            class="card success"
+            *ngIf="saved()">
+            Sikeresen elmentve.
+        </section>
+
+        <button
+            class="button primary large"
+            type="submit"
+            [disabled]="customerForm.invalid || saving()">
+            {{ saving() ? 'Mentés…' : 'Módosítások mentése' }}
+        </button>
+    </form>
+</ng-container>
+
+<ng-template #loadingTemplate>
+    <section
+        class="card"
+        *ngIf="!error()">
+        Betöltés…
+    </section>
+
+    <section
+        class="card error"
+        *ngIf="error()">
+        {{ error() }}
+    </section>
+</ng-template>

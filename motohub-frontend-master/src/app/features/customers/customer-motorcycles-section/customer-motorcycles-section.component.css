@@ -1,0 +1,38 @@
+:host {
+    display: block;
+}
+
+.motorcycle-customer-list {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.motorcycle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.875rem 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.motorcycle-row + .motorcycle-row {
+    border-top: 1px solid var(--border-color, rgba(127, 127, 127, 0.2));
+}
+
+.motorcycle-info {
+    min-width: 0;
+}
+
+.motorcycle-name {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.customer-arrow {
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    line-height: 1;
+}

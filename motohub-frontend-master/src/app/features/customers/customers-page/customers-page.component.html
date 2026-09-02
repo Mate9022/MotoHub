@@ -1,0 +1,36 @@
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Nyilvántartás</span>
+        <h1>Ügyfelek</h1>
+        <p>Ügyfelek keresése és kezelése.</p>
+    </div>
+
+    <a
+        class="button primary"
+        routerLink="/customers/new">
+        + Új ügyfél
+    </a>
+</section>
+
+<app-customer-search
+    [search]="search"
+    (searchChange)="onSearchChange($event)"
+    (searchSubmit)="loadCustomers()">
+</app-customer-search>
+
+<section
+    class="card"
+    *ngIf="loading()">
+    Betöltés…
+</section>
+
+<section
+    class="card error"
+    *ngIf="error()">
+    {{ error() }}
+</section>
+
+<app-customer-list
+    *ngIf="!loading()"
+    [customers]="customers()">
+</app-customer-list>

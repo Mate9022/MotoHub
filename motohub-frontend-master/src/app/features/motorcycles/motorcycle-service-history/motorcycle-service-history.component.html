@@ -1,0 +1,83 @@
+<section class="card">
+    <div class="row between gap wrap">
+        <div>
+            <h2>Szerviztörténet</h2>
+            <p class="muted">
+                A motorhoz tartozó korábbi és aktuális munkalapok.
+            </p>
+        </div>
+
+        <a
+            class="button"
+            [routerLink]="['/work-orders/new']"
+            [queryParams]="{ motorcycleId: motorcycleId }">
+            + Új munkalap
+        </a>
+    </div>
+
+    <div
+        class="muted service-history-loading"
+        *ngIf="loading">
+        Szerviztörténet betöltése…
+    </div>
+
+    <div
+        class="service-history"
+        *ngIf="!loading && workOrders.length > 0">
+
+        <a
+            class="service-history-item"
+            *ngFor="let order of workOrders"
+            [routerLink]="['/work-orders', order.id]">
+
+            <div class="service-history-main">
+                <div class="service-history-number">
+                    {{ order.workOrderNumber }}
+                </div>
+
+                <div class="row gap wrap">
+                    <strong class="service-history-date">
+                        {{ order.receivedAt | date:'yyyy.MM.dd.' }}
+                    </strong>
+
+                    <span
+                        class="badge"
+                        [class.completed]="order.status === 'COMPLETED'">
+                        {{ statusLabel(order.status) }}
+                    </span>
+                </div>
+
+                <div class="service-history-meta">
+                    <span>
+                        {{ order.odometerKm | number:'1.0-0' }} km
+                    </span>
+
+                    <span *ngIf="order.closedAt">
+                        · Lezárva:
+                        {{ order.closedAt | date:'yyyy.MM.dd.' }}
+                    </span>
+                </div>
+
+                <div
+                    class="service-history-complaint"
+                    *ngIf="order.complaint">
+                    {{ order.complaint }}
+                </div>
+            </div>
+
+            <div class="service-history-price">
+                <strong>
+                    {{ order.grandTotal | number:'1.0-0' }} Ft
+                </strong>
+
+                <span class="customer-arrow">›</span>
+            </div>
+        </a>
+    </div>
+
+    <div
+        class="empty"
+        *ngIf="!loading && workOrders.length === 0">
+        Ehhez a motorhoz még nincs rögzített munkalap.
+    </div>
+</section>

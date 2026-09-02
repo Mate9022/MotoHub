@@ -1,0 +1,57 @@
+<section class="page-heading">
+
+  <div>
+
+    <span class="eyebrow">
+      Műhely
+    </span>
+
+    <h1>
+      Munkalapok
+    </h1>
+
+    <p>
+      Aktív és lezárt szervizelések.
+    </p>
+
+  </div>
+
+
+  <a
+    class="button primary"
+    routerLink="/work-orders/new">
+
+    + Új munkalap
+
+  </a>
+
+</section>
+
+
+<app-work-order-search
+  (searchRequested)="load($event)">
+</app-work-order-search>
+
+
+<section
+  class="card"
+  *ngIf="loading()">
+
+  Betöltés…
+
+</section>
+
+
+<section
+  class="card error"
+  *ngIf="error()">
+
+  {{ error() }}
+
+</section>
+
+
+<app-work-order-list
+  *ngIf="!loading()"
+  [orders]="orders()">
+</app-work-order-list>

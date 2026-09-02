@@ -1,0 +1,117 @@
+<section class="work-order-list">
+
+  <a
+    class="card work-order-card"
+    *ngFor="let order of orders"
+    [routerLink]="[
+      '/work-orders',
+      order.id
+    ]">
+
+    <div class="row between gap wrap">
+
+      <div>
+
+        <div class="work-order-number">
+          {{ order.workOrderNumber }}
+        </div>
+
+
+        <div class="row gap wrap">
+
+          <strong class="work-order-motorcycle">
+            {{ order.motorcycle }}
+          </strong>
+
+
+          <span
+            class="badge"
+            [class.completed]="
+              order.status === 'COMPLETED'
+            ">
+
+            {{
+              statusLabel(
+                order.status
+              )
+            }}
+
+          </span>
+
+        </div>
+
+
+        <div class="muted">
+
+          {{ order.customerName }}
+
+          ·
+
+          {{
+            order.licensePlate
+              || 'nincs rendszám'
+          }}
+
+        </div>
+
+      </div>
+
+
+      <strong>
+
+        {{
+          order.odometerKm
+            | number:'1.0-0'
+        }} km
+
+      </strong>
+
+    </div>
+
+
+    <div class="muted top-space">
+
+      Beérkezés:
+
+      {{
+        order.receivedAt
+          | date:'yyyy.MM.dd. HH:mm'
+      }}
+
+    </div>
+
+
+    <p *ngIf="order.complaint">
+      {{ order.complaint }}
+    </p>
+
+
+    <div class="row between top-space">
+
+      <span class="muted">
+        Végösszeg
+      </span>
+
+      <strong>
+
+        {{
+          order.grandTotal
+            | number:'1.0-0'
+        }} Ft
+
+      </strong>
+
+    </div>
+
+  </a>
+
+
+  <section
+    class="card empty"
+    *ngIf="orders.length === 0">
+
+    Nincs munkalap.
+
+  </section>
+
+</section>

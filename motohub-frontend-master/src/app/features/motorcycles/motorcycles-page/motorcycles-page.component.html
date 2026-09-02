@@ -1,0 +1,30 @@
+<section class="page-heading">
+    <div>
+        <span class="eyebrow">Nyilvántartás</span>
+        <h1>Motorok</h1>
+        <p>A műhelyben nyilvántartott motorkerékpárok.</p>
+    </div>
+</section>
+
+<app-motorcycle-search
+    [search]="search"
+    (searchChange)="onSearchChange($event)"
+    (searchSubmit)="load()">
+</app-motorcycle-search>
+
+<section
+    class="card"
+    *ngIf="loading()">
+    Betöltés…
+</section>
+
+<section
+    class="card error"
+    *ngIf="error()">
+    {{ error() }}
+</section>
+
+<app-motorcycle-list
+    *ngIf="!loading()"
+    [motorcycles]="motorcycles()">
+</app-motorcycle-list>

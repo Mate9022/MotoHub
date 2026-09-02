@@ -1,0 +1,31 @@
+<section class="customer-list">
+    <a
+        class="card customer-card"
+        *ngFor="let customer of customers"
+        [routerLink]="['/customers', customer.id]">
+
+        <div class="row between gap">
+            <div>
+                <strong class="customer-name">
+                    {{ customer.name }}
+                </strong>
+
+                <div class="muted">
+                    {{ customer.phone || 'nincs telefonszám' }}
+                </div>
+
+                <div class="muted">
+                    {{ customer.email || 'nincs e-mail' }}
+                </div>
+            </div>
+
+            <span class="customer-arrow">›</span>
+        </div>
+    </a>
+
+    <section
+        class="card empty"
+        *ngIf="customers.length === 0">
+        Nincs találat.
+    </section>
+</section>

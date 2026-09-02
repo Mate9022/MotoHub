@@ -1,0 +1,203 @@
+<section class="card form-card">
+
+  <div class="row between gap wrap">
+
+    <h2>
+      Munkalap adatai
+    </h2>
+
+
+    <span
+      class="badge"
+      [class.completed]="
+        order.status === 'COMPLETED'
+      ">
+
+      {{
+        statusLabel(
+          order.status
+        )
+      }}
+
+    </span>
+
+  </div>
+
+
+  <div class="form-grid">
+
+    <label>
+
+      Státusz
+
+      <select
+        [(ngModel)]="edit.status"
+        [disabled]="
+          order.status === 'READY_FOR_PICKUP' ||
+          order.status === 'COMPLETED' ||
+          actionBusy
+        ">
+
+        <option value="OPEN">
+          Nyitott
+        </option>
+
+        <option value="IN_PROGRESS">
+          Javítás alatt
+        </option>
+
+        <option value="WAITING_PARTS">
+          Alkatrészre vár
+        </option>
+
+        <option
+          value="READY_FOR_PICKUP"
+          disabled>
+
+          Átadásra kész
+
+        </option>
+
+        <option
+          value="COMPLETED"
+          disabled>
+
+          Átadva / lezárva
+
+        </option>
+
+      </select>
+
+    </label>
+
+
+    <label>
+
+      Beérkezési kilométeróra
+
+      <input
+        [(ngModel)]="edit.odometerKm"
+        type="number"
+        min="0"
+        inputmode="numeric"
+        [disabled]="
+          isCompleted() ||
+          actionBusy
+        ">
+
+    </label>
+
+
+    <label
+      *ngIf="
+        order.status === 'READY_FOR_PICKUP'
+      ">
+
+      Átadáskori kilométeróra
+
+      <input
+        [ngModel]="handOverOdometerKm"
+        (ngModelChange)="
+          handOverOdometerKmChange.emit($event)
+        "
+        type="number"
+        [min]="order.odometerKm"
+        inputmode="numeric"
+        [disabled]="actionBusy">
+
+      <span class="muted">
+
+        Beérkezéskor:
+
+        {{
+          order.odometerKm
+            | number:'1.0-0'
+        }} km
+
+      </span>
+
+    </label>
+
+
+    <label
+      *ngIf="
+        order.status === 'COMPLETED' &&
+        order.handedOverOdometerKm != null
+      ">
+
+      Átadáskori kilométeróra
+
+      <input
+        [ngModel]="order.handedOverOdometerKm"
+        type="number"
+        disabled>
+
+    </label>
+
+
+    <label class="wide">
+
+      Ügyfél panasza / kérése
+
+      <textarea
+        [(ngModel)]="edit.complaint"
+        rows="5"
+        [disabled]="
+          isCompleted() ||
+          actionBusy
+        ">
+      </textarea>
+
+    </label>
+
+
+    <label class="wide">
+
+      Megállapítások
+
+      <textarea
+        [(ngModel)]="edit.findings"
+        rows="6"
+        [disabled]="
+          isCompleted() ||
+          actionBusy
+        ">
+      </textarea>
+
+    </label>
+
+
+    <label class="wide">
+
+      Ajánlások / következő karbantartás
+
+      <textarea
+        [(ngModel)]="edit.recommendations"
+        rows="6"
+        [disabled]="
+          isCompleted() ||
+          actionBusy
+        ">
+      </textarea>
+
+    </label>
+
+  </div>
+
+
+  <button
+    *ngIf="!isCompleted()"
+    class="button"
+    type="button"
+    [disabled]="actionBusy"
+    (click)="saveRequested.emit()">
+
+    {{
+      actionBusy
+        ? 'Mentés…'
+        : 'Munkalap mentése'
+    }}
+
+  </button>
+
+</section>

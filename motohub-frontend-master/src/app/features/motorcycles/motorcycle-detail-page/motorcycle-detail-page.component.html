@@ -1,0 +1,143 @@
+<ng-container *ngIf="motorcycle() as motorcycle; else loadingTemplate">
+    <section class="page-heading">
+        <div>
+            <span class="eyebrow">Motorkerékpár</span>
+
+            <h1>
+                {{ motorcycle.brand }} {{ motorcycle.model }}
+            </h1>
+
+            <p>
+                <a [routerLink]="['/customers', motorcycle.customerId]">
+                    {{ motorcycle.customerName }}
+                </a>
+
+                <ng-container *ngIf="motorcycle.licensePlate">
+                    · {{ motorcycle.licensePlate }}
+                </ng-container>
+
+                <ng-container *ngIf="motorcycle.modelYear">
+                    · {{ motorcycle.modelYear }}
+                </ng-container>
+            </p>
+        </div>
+
+        <a
+            class="button primary"
+            [routerLink]="['/work-orders/new']"
+            [queryParams]="{ motorcycleId: motorcycle.id }">
+            + Új munkalap
+        </a>
+    </section>
+
+    <div class="stack">
+        <form
+            #motorcycleForm="ngForm"
+            class="stack"
+            (ngSubmit)="save(motorcycleForm)">
+
+            <section class="card form-card">
+                <div class="row between gap wrap">
+                    <div>
+                        <h2>Motor adatai</h2>
+                        <p class="muted">A motorkerékpár alapadatai.</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <label>
+                        Márka
+                        <input
+                            required
+                            maxlength="100"
+                            name="brand"
+                            [(ngModel)]="form.brand">
+                    </label>
+
+                    <label>
+                        Típus
+                        <input
+                            required
+                            maxlength="120"
+                            name="model"
+                            [(ngModel)]="form.model">
+                    </label>
+
+                    <label>
+                        Évjárat
+                        <input
+                            name="modelYear"
+                            [(ngModel)]="form.modelYear"
+                            type="number"
+                            min="1900"
+                            max="2100"
+                            inputmode="numeric">
+                    </label>
+
+                    <label>
+                        Rendszám
+                        <input
+                            maxlength="30"
+                            name="licensePlate"
+                            [(ngModel)]="form.licensePlate">
+                    </label>
+
+                    <label class="wide">
+                        Alvázszám (VIN)
+                        <input
+                            maxlength="80"
+                            name="vin"
+                            [(ngModel)]="form.vin">
+                    </label>
+                </div>
+
+                <button
+                    class="button"
+                    type="submit"
+                    [disabled]="motorcycleForm.invalid || saving()">
+                    {{ saving() ? 'Mentés…' : 'Módosítások mentése' }}
+                </button>
+            </section>
+
+            <section
+                class="card success"
+                *ngIf="saved()">
+                Sikeresen elmentve.
+            </section>
+        </form>
+
+        <app-motorcycle-owner-section
+            [motorcycle]="motorcycle">
+        </app-motorcycle-owner-section>
+
+        <app-motorcycle-service-history
+            [motorcycleId]="motorcycle.id"
+            [workOrders]="workOrders()"
+            [loading]="workOrdersLoading()">
+        </app-motorcycle-service-history>
+
+        <app-motorcycle-system-info
+            [motorcycle]="motorcycle">
+        </app-motorcycle-system-info>
+
+        <section
+            class="card error"
+            *ngIf="error()">
+            {{ error() }}
+        </section>
+    </div>
+</ng-container>
+
+<ng-template #loadingTemplate>
+    <section
+        class="card"
+        *ngIf="!error()">
+        Betöltés…
+    </section>
+
+    <section
+        class="card error"
+        *ngIf="error()">
+        {{ error() }}
+    </section>
+</ng-template>

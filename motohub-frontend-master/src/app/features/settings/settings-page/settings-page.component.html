@@ -1,0 +1,218 @@
+<section class="page-heading">
+
+    <div>
+
+        <span class="eyebrow">
+            Rendszer
+        </span>
+
+        <h1>
+            Műhelybeállítások
+        </h1>
+
+        <p>
+            A műhely adatai, valamint a munkalapok
+            alapértelmezett beállításai.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section
+    class="card"
+    *ngIf="loading()">
+
+    Betöltés…
+
+</section>
+
+
+<form
+    *ngIf="!loading()"
+    #settingsForm="ngForm"
+    class="stack"
+    (ngSubmit)="save(settingsForm)">
+
+
+    <section class="card form-card">
+
+        <div>
+
+            <h2>
+                Műhely adatai
+            </h2>
+
+            <p class="muted">
+                Ezek az adatok később a kiállított
+                munkalapokon és PDF dokumentumokon is
+                megjelennek.
+            </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <label class="wide">
+
+                Műhely neve
+
+                <input
+                    required
+                    maxlength="200"
+                    name="workshopName"
+                    [(ngModel)]="form.workshopName"
+                    placeholder="Motor Műhely">
+
+            </label>
+
+
+            <label class="wide">
+
+                Cím
+
+                <input
+                    maxlength="300"
+                    name="address"
+                    [(ngModel)]="form.address"
+                    placeholder="5000 Szolnok, Példa utca 1.">
+
+            </label>
+
+
+            <label>
+
+                Telefonszám
+
+                <input
+                    maxlength="60"
+                    name="phone"
+                    [(ngModel)]="form.phone"
+                    inputmode="tel"
+                    placeholder="+36 30 123 4567">
+
+            </label>
+
+
+            <label>
+
+                E-mail
+
+                <input
+                    maxlength="160"
+                    name="email"
+                    [(ngModel)]="form.email"
+                    type="email"
+                    placeholder="info@motormuhely.hu">
+
+            </label>
+
+
+            <label>
+
+                Adószám
+
+                <input
+                    maxlength="60"
+                    name="taxNumber"
+                    [(ngModel)]="form.taxNumber"
+                    placeholder="12345678-1-16">
+
+            </label>
+
+        </div>
+
+    </section>
+
+
+    <section class="card form-card">
+
+        <div>
+
+            <h2>
+                Munkalap alapértelmezések
+            </h2>
+
+            <p class="muted">
+                Ezekkel az értékekkel gyorsabban lehet
+                új munkalaptételeket rögzíteni.
+            </p>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <label>
+
+                Alapértelmezett óradíj
+
+                <div class="input-with-unit">
+
+                    <input
+                        required
+                        name="defaultHourlyRate"
+                        [(ngModel)]="
+                            form.defaultHourlyRate
+                        "
+                        type="number"
+                        min="0"
+                        step="1"
+                        inputmode="numeric">
+
+                    <span>
+                        Ft / óra
+                    </span>
+
+                </div>
+
+            </label>
+
+        </div>
+
+    </section>
+
+
+    <app-settings-system-info
+        *ngIf="updatedAt() as date"
+        [updatedAt]="date">
+    </app-settings-system-info>
+
+
+    <section
+        class="card error"
+        *ngIf="error()">
+
+        {{ error() }}
+
+    </section>
+
+
+    <section
+        class="card success"
+        *ngIf="saved()">
+
+        A műhelybeállítások sikeresen elmentve.
+
+    </section>
+
+
+    <button
+        class="button primary large"
+        type="submit"
+        [disabled]="
+            settingsForm.invalid ||
+            saving()
+        ">
+
+        {{
+            saving()
+                ? 'Mentés…'
+                : 'Módosítások mentése'
+        }}
+
+    </button>
+
+</form>

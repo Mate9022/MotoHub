@@ -1,0 +1,64 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  FRONTEND_IMAGE: "motoros-frontend:$CI_COMMIT_SHA"
+
+build-frontend:
+  stage: build
+
+  tags:
+    - motoros-pi
+
+  when: manual
+  allow_failure: false
+
+  script:
+    - |
+      echo "Frontend build indul..."
+      echo "Image: ${FRONTEND_IMAGE}"
+
+      docker build \
+        --label "motoros.component=frontend" \
+        --label "motoros.commit=${CI_COMMIT_SHA}" \
+        -t "${FRONTEND_IMAGE}" \
+        .
+
+      echo "Frontend build elkészült."
+
+      docker image inspect "${FRONTEND_IMAGE}" >/dev/null
+
+      docker images | grep motoros-frontend
+
+
+deploy-frontend:
+  stage: deploy
+
+  tags:
+    - motoros-pi
+
+  when: manual
+  allow_failure: false
+
+  needs:
+    - job: build-frontend
+
+  resource_group: motoros-production
+
+  script:
+    - |
+      echo "Frontend deploy indul..."
+      echo "Image: ${FRONTEND_IMAGE}"
+
+      docker image inspect "${FRONTEND_IMAGE}" >/dev/null
+
+      cd /srv/motoros
+
+      FRONTEND_IMAGE="${FRONTEND_IMAGE}" \
+        docker compose up -d --no-deps frontend
+
+      echo "Frontend konténer állapota:"
+      docker ps --filter "name=motoros-frontend"
+
+      echo "Frontend deploy kész."

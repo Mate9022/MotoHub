@@ -1,0 +1,157 @@
+<ng-container
+  *ngIf="
+    order() as o;
+    else loadingTemplate
+  ">
+
+  <app-work-order-header
+    [order]="o"
+    [actionBusy]="actionBusy()"
+    (markReadyRequested)="markReady()"
+    (handOverRequested)="handOver()"
+    (reopenRequested)="reopenOrder()">
+  </app-work-order-header>
+
+
+  <div class="detail-grid">
+
+    <div class="stack">
+
+      <app-work-order-info-section
+        [order]="o"
+        [edit]="edit"
+        [handOverOdometerKm]="
+          handOverOdometerKm
+        "
+        [actionBusy]="actionBusy()"
+        (handOverOdometerKmChange)="
+          handOverOdometerKm = $event
+        "
+        (saveRequested)="saveWorkOrder()">
+      </app-work-order-info-section>
+
+
+      <app-work-order-labor-section
+        [items]="o.laborItems"
+        [defaultHourlyRate]="
+          defaultHourlyRate()
+        "
+        [completed]="isCompleted()"
+        [actionBusy]="actionBusy()"
+        [editingLaborId]="
+          editingLaborId()
+        "
+        [labor]="labor"
+        [laborEdit]="laborEdit"
+        (addRequested)="addLabor($event)"
+        (startEditRequested)="
+          startLaborEdit($event)
+        "
+        (cancelEditRequested)="
+          cancelLaborEdit()
+        "
+        (saveEditRequested)="
+          saveLaborEdit($event)
+        "
+        (deleteRequested)="
+          deleteLabor($event)
+        ">
+      </app-work-order-labor-section>
+
+
+      <app-work-order-parts-section
+        [items]="o.partItems"
+        [completed]="isCompleted()"
+        [actionBusy]="actionBusy()"
+        [editingPartId]="
+          editingPartId()
+        "
+        [part]="part"
+        [partEdit]="partEdit"
+        (addRequested)="addPart($event)"
+        (startEditRequested)="
+          startPartEdit($event)
+        "
+        (cancelEditRequested)="
+          cancelPartEdit()
+        "
+        (saveEditRequested)="
+          savePartEdit($event)
+        "
+        (deleteRequested)="
+          deletePart($event)
+        ">
+      </app-work-order-parts-section>
+
+
+      <app-work-order-photos-section
+        [workOrderId]="o.id"
+        [photos]="photos()"
+        [loading]="photosLoading()"
+        [uploading]="photoUploading()"
+        [completed]="isCompleted()"
+        [error]="photoError()"
+        (uploadRequested)="
+          uploadPhoto($event)
+        "
+        (deleteRequested)="
+          deletePhoto($event)
+        ">
+      </app-work-order-photos-section>
+
+
+      <section
+        class="card error"
+        *ngIf="error()">
+
+        {{ error() }}
+
+      </section>
+
+
+      <section
+        class="card success"
+        *ngIf="saved()">
+
+        Sikeresen elmentve.
+
+      </section>
+
+    </div>
+
+
+    <app-work-order-totals
+      [order]="o"
+      [defaultHourlyRate]="
+        defaultHourlyRate()
+      "
+      [photoCount]="
+        photos().length
+      ">
+    </app-work-order-totals>
+
+  </div>
+
+</ng-container>
+
+
+<ng-template #loadingTemplate>
+
+  <section
+    class="card"
+    *ngIf="!error()">
+
+    Betöltés…
+
+  </section>
+
+
+  <section
+    class="card error"
+    *ngIf="error()">
+
+    {{ error() }}
+
+  </section>
+
+</ng-template>

@@ -1,0 +1,25 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  BACKEND_IMAGE: "motoros-backend:$CI_COMMIT_SHA"
+
+build-backend:
+  stage: build
+  tags:
+    - motoros-pi
+  when: manual
+  script:
+    - docker build -t "$BACKEND_IMAGE" .
+
+deploy-backend:
+  stage: deploy
+  tags:
+    - motoros-pi
+  when: manual
+  needs:
+    - build-backend
+  script:
+    - cd /srv/motoros
+    - BACKEND_IMAGE="$BACKEND_IMAGE" docker compose up -d --no-deps backend

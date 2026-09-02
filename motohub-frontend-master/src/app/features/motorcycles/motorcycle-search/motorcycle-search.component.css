@@ -1,0 +1,21 @@
+:host {
+    display: block;
+}
+
+.motorcycle-search {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.motorcycle-search input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+@media (max-width: 640px) {
+    .motorcycle-search {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}

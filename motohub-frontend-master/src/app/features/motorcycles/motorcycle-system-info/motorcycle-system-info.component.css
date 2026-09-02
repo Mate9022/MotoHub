@@ -1,0 +1,7 @@
+:host {
+    display: block;
+}
+
+.muted + .muted {
+    margin-top: 0.25rem;
+}

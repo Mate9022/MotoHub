@@ -1,0 +1,12 @@
+:host {
+    display: block;
+}
+
+app-customer-search,
+app-customer-list {
+    display: block;
+}
+
+app-customer-search {
+    margin-bottom: 1rem;
+}

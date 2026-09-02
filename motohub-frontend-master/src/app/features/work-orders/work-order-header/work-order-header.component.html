@@ -1,0 +1,109 @@
+<section class="page-heading">
+
+  <div>
+
+    <span class="eyebrow">
+      Munkalap
+    </span>
+
+    <h1>
+      {{ order.workOrderNumber }}
+    </h1>
+
+    <div class="work-order-detail-motorcycle">
+      {{ order.motorcycle }}
+    </div>
+
+    <p>
+
+      <a
+        [routerLink]="[
+          '/customers',
+          order.customerId
+        ]">
+
+        {{ order.customerName }}
+
+      </a>
+
+      ·
+
+      {{ order.licensePlate || 'nincs rendszám' }}
+
+      ·
+
+      {{
+        order.odometerKm
+          | number:'1.0-0'
+      }} km
+
+    </p>
+
+  </div>
+
+
+  <div class="row gap wrap">
+
+    <a
+      class="button"
+      [href]="api.pdfUrl(order.id)"
+      target="_blank">
+
+      PDF
+
+    </a>
+
+
+    <button
+      *ngIf="
+        order.status !== 'READY_FOR_PICKUP' &&
+        order.status !== 'COMPLETED'
+      "
+      class="button primary"
+      type="button"
+      [disabled]="actionBusy"
+      (click)="markReadyRequested.emit()">
+
+      {{
+        actionBusy
+          ? 'Mentés…'
+          : 'Javítás kész'
+      }}
+
+    </button>
+
+
+    <button
+      *ngIf="
+        order.status === 'READY_FOR_PICKUP'
+      "
+      class="button primary"
+      type="button"
+      [disabled]="actionBusy"
+      (click)="handOverRequested.emit()">
+
+      {{
+        actionBusy
+          ? 'Lezárás…'
+          : 'Átadás az ügyfélnek'
+      }}
+
+    </button>
+
+
+    <button
+      *ngIf="
+        order.status === 'COMPLETED'
+      "
+      class="button"
+      type="button"
+      [disabled]="actionBusy"
+      (click)="reopenRequested.emit()">
+
+      Újranyitás
+
+    </button>
+
+  </div>
+
+</section>

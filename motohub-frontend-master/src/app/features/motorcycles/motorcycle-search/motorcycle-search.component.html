@@ -1,0 +1,16 @@
+<section class="card">
+    <div class="motorcycle-search">
+        <input
+            type="search"
+            [ngModel]="search"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Rendszám, VIN, márka vagy típus">
+
+        <button
+            type="button"
+            class="button"
+            (click)="searchSubmit.emit()">
+            Keresés
+        </button>
+    </div>
+</section>

@@ -1,0 +1,35 @@
+<section class="motorcycle-list">
+    <a
+        class="card motorcycle-card"
+        *ngFor="let motorcycle of motorcycles"
+        [routerLink]="['/motorcycles', motorcycle.id]">
+
+        <div class="row between gap">
+            <div>
+                <strong class="motorcycle-name">
+                    {{ motorcycle.brand }} {{ motorcycle.model }}
+                </strong>
+
+                <div class="muted">
+                    {{ motorcycle.licensePlate || 'nincs rendszám' }}
+
+                    <ng-container *ngIf="motorcycle.modelYear">
+                        · {{ motorcycle.modelYear }}
+                    </ng-container>
+                </div>
+
+                <div class="muted">
+                    Tulajdonos: {{ motorcycle.customerName }}
+                </div>
+            </div>
+
+            <span class="customer-arrow">›</span>
+        </div>
+    </a>
+
+    <section
+        class="card empty"
+        *ngIf="motorcycles.length === 0">
+        Nincs találat.
+    </section>
+</section>
