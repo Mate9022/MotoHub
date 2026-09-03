@@ -1,15 +1,14 @@
 spring:
   application:
     name: motor-workshop-api
+
   servlet:
     multipart:
       max-file-size: 15MB
       max-request-size: 15MB
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/motorworkshop}
-    username: ${DB_USER:motorworkshop}
-    password: ${DB_PASSWORD:motorworkshop}
+    url: jdbc:sqlite:./data/motoros.db
 
   jpa:
     open-in-view: false
@@ -17,11 +16,9 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
         jdbc:
           time_zone: UTC
-
-  flyway:
-    enabled: false
 
 server:
   port: ${SERVER_PORT:8081}
